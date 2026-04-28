@@ -30,8 +30,9 @@ Currently configured to default to **India (IN) Electoral pathways**, the archit
 ## 🚀 Getting Started (Local Development)
 
 ### 1. Installation
-Clone the repository and install dependencies using npm:
+Clone the repository from GitHub and install the necessary dependencies using npm:
 ```bash
+git clone https://github.com/Arghajit-Saha/promptwar-challenge-2.git
 cd promptwar-challenge-2
 npm install
 ```
