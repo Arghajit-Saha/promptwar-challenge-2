@@ -11,9 +11,37 @@ const PollingPage = () => {
     { id: 2, name: "Community Civic Center", address: "456 Oak Avenue, Anytown", hours: "7:00 AM - 8:00 PM", distance: "1.2 miles" },
   ];
 
-  const handleSearch = (e) => {
+  const [mapUrl, setMapUrl] = useState('');
+
+  const handleSearch = async (e) => {
     e.preventDefault();
-    if(zipcode.trim()) setSearched(true);
+    if (!zipcode.trim()) return;
+    
+    setSearched(true);
+    
+    // Check if we have a live Google Maps API Key
+    if (import.meta.env.VITE_GOOGLE_MAPS_API_KEY) {
+      setMapUrl(`https://www.google.com/maps/embed/v1/place?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}&q=polling+station+near+${zipcode}`);
+    } else {
+      // Fallback: Use free OpenStreetMap Geocoding to locate the zip code
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(zipcode)}&format=json&limit=1`);
+        const data = await res.json();
+        
+        if (data && data.length > 0) {
+          const loc = data[0];
+          // Nominatim BoundingBox: [lat_min, lat_max, lon_min, lon_max]
+          // OSM Embed BoundingBox format expects: lon_min,lat_min,lon_max,lat_max
+          const bbox = `${loc.boundingbox[2]},${loc.boundingbox[0]},${loc.boundingbox[3]},${loc.boundingbox[1]}`;
+          setMapUrl(`https://www.openstreetmap.org/export/embed.html?bbox=${encodeURIComponent(bbox)}&layer=mapnik&marker=${loc.lat}%2C${loc.lon}`);
+        } else {
+          // If zip code fails to match entirely, fallback to a world view
+          setMapUrl(`https://www.openstreetmap.org/export/embed.html?bbox=-180%2C-90%2C180%2C90&layer=mapnik`);
+        }
+      } catch (err) {
+        setMapUrl(`https://www.openstreetmap.org/export/embed.html?bbox=-180%2C-90%2C180%2C90&layer=mapnik`);
+      }
+    }
   };
 
   return (
@@ -91,9 +119,7 @@ const PollingPage = () => {
                 height="100%"
                 frameBorder="0"
                 style={{ border: 0 }}
-                src={import.meta.env.VITE_GOOGLE_MAPS_API_KEY ? 
-                     `https://www.google.com/maps/embed/v1/place?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}&q=polling+station+near+${zipcode}` : 
-                     `https://www.openstreetmap.org/export/embed.html?bbox=-77.06%2C38.87%2C-76.95%2C38.93&layer=mapnik&marker=38.8977%2C-77.0365`}
+                src={mapUrl}
                 allowFullScreen
               ></iframe>
             ) : (
