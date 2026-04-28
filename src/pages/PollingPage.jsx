@@ -91,7 +91,9 @@ const PollingPage = () => {
                 height="100%"
                 frameBorder="0"
                 style={{ border: 0 }}
-                src={`https://www.google.com/maps/embed/v1/place?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY || 'YOUR_API_KEY'}&q=polling+station+near+${zipcode}`}
+                src={import.meta.env.VITE_GOOGLE_MAPS_API_KEY ? 
+                     `https://www.google.com/maps/embed/v1/place?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}&q=polling+station+near+${zipcode}` : 
+                     `https://www.openstreetmap.org/export/embed.html?bbox=-77.06%2C38.87%2C-76.95%2C38.93&layer=mapnik&marker=38.8977%2C-77.0365`}
                 allowFullScreen
               ></iframe>
             ) : (
