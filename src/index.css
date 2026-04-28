@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-navy-800 font-sans antialiased;
+    overflow-x: hidden;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif text-navy-900 tracking-tight;
+  }
+}
+
+@layer components {
+  /* Newspaper style column layout for large text blocks */
+  .editorial-columns {
+    column-count: 1;
+    column-gap: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .editorial-columns {
+      column-count: 2;
+    }
+  }
+
+  /* Ruled lines for that newspaper feel */
+  .ruled-top {
+    @apply border-t-2 border-navy-900;
+  }
+  
+  .ruled-bottom {
+    @apply border-b-2 border-navy-900;
+  }
+  
+  /* Primary Button */
+  .btn-primary {
+    @apply relative overflow-hidden bg-navy-700 text-ivory px-6 py-3 font-sans font-medium transition-transform hover:-translate-y-0.5 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-navy-600 focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Secondary / Ghost Button */
+  .btn-secondary {
+    @apply bg-transparent border border-navy-700 text-navy-700 px-6 py-3 font-sans font-medium transition-colors hover:bg-navy-700 hover:text-ivory focus:outline-none focus:ring-2 focus:ring-navy-600 focus:ring-offset-2 focus:ring-offset-background;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: theme('colors.ivory.DEFAULT');
+}
+
+::-webkit-scrollbar-thumb {
+  background: theme('colors.navy.300', #94a3b8);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: theme('colors.navy.500', #64748b);
+}
